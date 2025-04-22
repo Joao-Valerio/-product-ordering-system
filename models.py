@@ -24,6 +24,7 @@ class Order(BaseModel):
 class productOrder(BaseModel):
     pedido = ForeignKeyField(Order, backref='itens')
     produto = ForeignKeyField(Product)
+    quantidade = IntegerField(default=1)
 
 myDb.connect()
-myDb.create_tables([User, Product, Order])
+myDb.create_tables([User, Product, Order, productOrder])

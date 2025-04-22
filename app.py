@@ -137,24 +137,14 @@ def ordersMenu():
         else:
             print("Opção inválida. Tente novamente.")
 
-def adicionar_itens_ao_pedido(pedido=None):
-
-    if pedido is None:
-        try:
-            order_id = int(input("ID do pedido para adicionar itens: "))
-            pedido = models.Order.get_by_id(order_id)
-        except models.Order.DoesNotExist:
-            print(f"Pedido com ID {order_id} não encontrado.")
-            return
-        except ValueError:
-            print("ID de pedido inválido. Digite um número inteiro.")
-            return
+def adicionar_itens_ao_pedido(pedido):
 
     while True:
         try:
             product_id = int(input("ID do produto a adicionar (ou 0 para terminar): "))
             if product_id == 0:
-                break
+                break  # Encerra o loop quando o usuário digita 0
+
             produto = models.Product.get_by_id(product_id)
             quantidade = int(input("Quantidade: "))
             models.productOrder.create(pedido=pedido, produto=produto)
@@ -166,10 +156,60 @@ def adicionar_itens_ao_pedido(pedido=None):
         except models.Product.DoesNotExist:
             print(f"Produto com ID {product_id} não encontrado.")
         except ValueError:
-            print("ID de produto ou quantidade inválido. Digite um número inteiro.")
+            print("ID de produto ou quantidade inválida. Digite um número inteiro.")
         except Exception as e:
             print(f"Erro ao adicionar item: {e}")
+    print("Itens adicionados ao pedido.")
 
+
+def ordersMenu():
+    while (True):
+        print("\n--- Menu de Pedidos ---")
+        print("1 - Criar novo pedido")
+        print("2 - Listar pedidos")
+        print("3 - Adicionar item ao pedido")
+        print("0 - Voltar")
+        op = input("Escolha: ")
+
+        if op == "1":
+            try:
+                user_id = int(input("ID do cliente para este pedido: "))
+                user = models.User.get_by_id(user_id)
+                novo_pedido = models.Order.create(user=user, orderDate=datetime.now(),
+                                                totalPrice=0.0)  
+                print(f"Pedido {novo_pedido.id} criado para o cliente {user.name}.")
+                adicionar_itens_ao_pedido(
+                    novo_pedido)  
+            except models.User.DoesNotExist:
+                print(f"Cliente com ID {user_id} não encontrado.")
+            except ValueError:
+                print("ID inválido. Digite um número inteiro.")
+
+        elif op == "2":
+            print("\n--- Lista de Pedidos ---")
+            for order in models.Order.select(models.Order, models.User).join(
+                    models.User).order_by(models.Order.id):
+                print(
+                    f"ID: {order.id}, Cliente: {order.user.name} (ID: {order.user.id}), Data: {order.orderDate.strftime('%d/%m/%Y %H:%M:%S')}, Total: R$ {order.totalPrice:.2f}")
+                print("Itens do Pedido:")
+                for item in models.productOrder.select(models.productOrder, models.Product).join(
+                        models.Product).where(models.productOrder.pedido == order):
+                    print(f"  - {item.produto.productName} (x{item.quantidade}, R$ {item.produto.price} cada)")
+
+        elif op == "3":
+            try:
+                order_id = int(input("ID do pedido para adicionar itens: "))
+                pedido = models.Order.get_by_id(order_id)
+                adicionar_itens_ao_pedido(pedido)  
+            except models.Order.DoesNotExist:
+                print(f"Pedido com ID {order_id} não encontrado.")
+            except ValueError:
+                print("ID de pedido inválido. Digite um número inteiro.")
+
+        elif op == "0":
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
 def menu():
     while(True):
         print("\n--- Menu Principal ---")
