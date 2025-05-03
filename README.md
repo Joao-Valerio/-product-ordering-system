@@ -2,7 +2,8 @@
 
 📦 Funcionalidades
 
-👥 Clientes Criar cliente
+👥 Clientes
+Criar cliente
 
 Listar clientes
 
@@ -10,7 +11,8 @@ Atualizar cliente
 
 Excluir cliente
 
-🛒 Produtos Cadastrar produto
+🛒 Produtos 
+Cadastrar produto
 
 Listar produtos
 
@@ -18,7 +20,8 @@ Atualizar produto
 
 Excluir produto
 
-📑 Pedidos Criar pedido para um cliente
+📑 Pedidos 
+Criar pedido para um cliente
 
 Adicionar itens ao pedido
 
@@ -26,7 +29,8 @@ Listar pedidos
 
 Excluir pedidos
 
-🗃️ Estrutura do Banco de Dados O banco dados.db contém as seguintes tabelas:
+🗃️ Estrutura do Banco de Dados 
+O banco dados.db contém as seguintes tabelas:
 
 User: Armazena nome e CPF dos clientes.
 
@@ -36,4 +40,5 @@ Order: Armazena o pedido com cliente, data e valor total.
 
 ProductOrder: Relaciona pedidos com produtos e suas quantidades.
 
-🧑‍💻 Autor Desenvolvido por João Valério Santana
+🧑‍💻 Autor 
+Desenvolvido por João Valério Santana
